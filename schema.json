@@ -1,0 +1,39 @@
+{
+    "categories": {
+      "1": {
+        "name": "Desserts",
+        "caption": "Sweet and indulgent treats"
+      },
+      "2": {
+        "name": "Fast Food",
+        "caption": "Satisfy your pizza cravings"
+      }
+    },
+    "restaurants": {
+      "1": {
+        "name": "The Sweet Spot",
+        "category_id": "1",
+        "rating_1": 4.5,
+        "rating_2": 4.0,
+        "rating_3": 4.8,
+        "notes": "Best for chocolate lovers.",
+        "visits": ["2024-12-01"],
+        "location": "123 Candy Lane, Dessertville",
+        "dishes": ["Chocolate Cake", "Brownie Sundae"],
+        "photo": "https://example.com/photos/sweet-spot.jpg"
+      },
+      "2": {
+        "name": "Jollibee",
+        "category_id": "2",
+        "rating_1": 4.3,
+        "rating_2": 4.4,
+        "rating_3": 4.1,
+        "notes": "Light and fluffy cakes.",
+        "visits": ["2024-11-15"],
+        "location": "789 Frosting Ave, Dessertville",
+        "dishes": ["Red Velvet Cake", "Cheesecake"],
+        "photo": "https://example.com/photos/cake-heaven.jpg"
+      }
+    }
+  }
+  
