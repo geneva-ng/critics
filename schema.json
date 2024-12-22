@@ -1,39 +1,55 @@
 {
-    "categories": {
-      "1": {
-        "name": "Desserts",
-        "caption": "Sweet and indulgent treats"
-      },
-      "2": {
-        "name": "Fast Food",
-        "caption": "Satisfy your pizza cravings"
-      }
+  "users": {
+    "user1": {
+      "user_key": "abc123",
+      "boards": ["board123"]
     },
-    "restaurants": {
-      "1": {
-        "name": "The Sweet Spot",
-        "category_id": "1",
-        "rating_1": 4.5,
-        "rating_2": 4.0,
-        "rating_3": 4.8,
-        "notes": "Best for chocolate lovers.",
-        "visits": ["2024-12-01"],
-        "location": "123 Candy Lane, Dessertville",
-        "dishes": ["Chocolate Cake", "Brownie Sundae"],
-        "photo": "https://example.com/photos/sweet-spot.jpg"
+    "user2": {
+      "user_key": "xyz789",
+      "boards": ["board123"]
+    }
+  },
+  "boards": {
+    "board123": {
+      "board_code": "board123",
+      "owner_key": "abc123",
+      "members": ["abc123", "xyz789"],
+      "categories": {
+        "1": {
+          "name": "Desserts",
+          "caption": "Sweet and indulgent treats"
+        },
+        "2": {
+          "name": "Fast Food",
+          "caption": "Satisfy your pizza cravings"
+        }
       },
-      "2": {
-        "name": "Jollibee",
-        "category_id": "2",
-        "rating_1": 4.3,
-        "rating_2": 4.4,
-        "rating_3": 4.1,
-        "notes": "Light and fluffy cakes.",
-        "visits": ["2024-11-15"],
-        "location": "789 Frosting Ave, Dessertville",
-        "dishes": ["Red Velvet Cake", "Cheesecake"],
-        "photo": "https://example.com/photos/cake-heaven.jpg"
+      "restaurants": {
+        "1": {
+          "name": "The Sweet Spot",
+          "category_id": "1",
+          "rating_1": 4.5,
+          "rating_2": 4.0,
+          "rating_3": 4.8,
+          "notes": "Best for chocolate lovers.",
+          "visits": ["2024-12-01"],
+          "location": "123 Candy Lane, Dessertville",
+          "dishes": ["Chocolate Cake", "Brownie Sundae"],
+          "photo": "https://example.com/photos/sweet-spot.jpg"
+        },
+        "2": {
+          "name": "Jollibee",
+          "category_id": "2",
+          "rating_1": 4.3,
+          "rating_2": 4.4,
+          "rating_3": 4.1,
+          "notes": "Light and fluffy cakes.",
+          "visits": ["2024-11-15"],
+          "location": "789 Frosting Ave, Dessertville",
+          "dishes": ["Red Velvet Cake", "Cheesecake"],
+          "photo": "https://example.com/photos/cake-heaven.jpg"
+        }
       }
     }
   }
-  
+}
