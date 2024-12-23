@@ -1,88 +1,63 @@
-from utils.firebase import initialize_firebase, read_data, delete_data
-from utils.board import create_board, edit_board
-from utils.category import add_category, edit_category
-from utils.restaurant import add_restaurant, edit_restaurant_rating, edit_restaurant_dishes
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import firebase_admin
+from firebase_admin import credentials, db
 
-# Initialize Firebase
-initialize_firebase("./gcreds_test.json", "https://critics-4bf98-default-rtdb.firebaseio.com/")
+SERVICE_ACCOUNT_PATH = "/Users/geneva/Downloads/critics/gcreds_test.json"
+if not firebase_admin._apps:  # Prevent duplicate initialization
+    cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://critics-4bf98-default-rtdb.firebaseio.com/'
+    })
 
-# Define board and restaurant data
-board_id = "board_001"  # Using a code-like identifier for the board
-category_id = "cat_001"
-restaurant_id = "rest_001"
+from utils.board import get_board_data, add_member_to_board
+from utils.user import create_user, join_board
+import uuid
 
-# Simulate User Tasks
-def enact_changes():
-    """Simulate a user performing tasks on the database."""
-    # Step 1: Create a new board named "Fine Dining Adventures"
-    print("Creating board 'Fine Dining Adventures'...")
-    create_board(board_id, name="Fine Dining Adventures", description="A collection of upscale restaurant experiences")
-    print("Board created.")
-
-    # Step 2: Create a new category named "Fine Dining"
-    print("Creating category 'Fine Dining'...")
-    add_category(board_id, category_id, "Fine Dining", "")
-    print("Category created.")
-
-    # Step 3: Add a caption to the category
-    print("Adding a caption to the category...")
-    edit_category(board_id, category_id, name="Fine Dining", caption="Elegant and upscale experiences")
-    print("Caption added.")
-
-    # Step 4: Add a restaurant named Oxomoco
-    print("Adding a restaurant 'Oxomoco'...")
-    restaurant_data = {
-        "name": "Oxomoco",
-        "category_id": category_id,
-        "rating_1": 8.5,
-        "rating_2": 9.0,
-        "rating_3": 7.5,
-        "notes": "Arbitrary data for testing.",
-        "visits": ["2024-12-23"],
-        "location": "128 Greenpoint Ave, Brooklyn, NY",
-        "dishes": [],
-        "photo": "http://example.com/oxomoco.jpg"
+def create_new_board(owner_key, name=None):
+    """
+    Create a new board with the specified owner.
+    
+    Args:
+        owner_key: The user key of the board owner
+        name: Optional name for the board
+        
+    Returns:
+        The board ID of the newly created board
+    """
+    # Generate unique board ID
+    board_id = str(uuid.uuid4())[:8]
+    
+    # Initialize board data
+    board_data = {
+        "board_code": board_id,
+        "owner_key": owner_key,
+        "members": [owner_key],
+        "name": name,
+        "categories": {},
+        "restaurants": {}
     }
-    add_restaurant(board_id, restaurant_id, restaurant_data)
-    print("Restaurant added.")
+    
+    # Write board data to database
+    ref = db.reference(f'boards/{board_id}')
+    ref.set(board_data)
+    
+    # Add board to owner's boards list
+    join_board(owner_key, board_id)
+    
+    return board_id
 
-    # Step 5: Change all ratings to 6
-    print("Updating ratings for 'Oxomoco'...")
-    edit_restaurant_rating(board_id, restaurant_id, rating_1=6.0, rating_2=6.0, rating_3=6.0)
-    print("Ratings updated.")
-
-    # Step 6: Add three dishes
-    print("Adding dishes for 'Oxomoco'...")
-    dishes = ["Grilled Avocado", "Tlayuda", "Short Rib Tacos"]
-    edit_restaurant_dishes(board_id, restaurant_id, dishes)
-    print("Dishes added.")
-
-    # Step 7: Reorder the dishes
-    print("Reordering dishes for 'Oxomoco'...")
-    reordered_dishes = ["Short Rib Tacos", "Grilled Avocado", "Tlayuda"]
-    edit_restaurant_dishes(board_id, restaurant_id, reordered_dishes)
-    print("Dishes reordered.")
-
-def undo_changes():
-    """Undo changes made by the enact_changes function."""
-    print("Undoing changes...")
-    # Delete the restaurant
-    print(f"Deleting restaurant '{restaurant_id}'...")
-    delete_data(f"boards/{board_id}/restaurants/{restaurant_id}")
-    print("Restaurant deleted.")
-
-    # Delete the category
-    print(f"Deleting category '{category_id}'...")
-    delete_data(f"boards/{board_id}/categories/{category_id}")
-    print("Category deleted.")
-
-    # Delete the board
-    print(f"Deleting board '{board_id}'...")
-    delete_data(f"boards/{board_id}")
-    print("Board deleted.")
-
-# Toggle between enact and undo
+# Example usage of create_new_board function
 if __name__ == "__main__":
-    # Comment out one of the following lines to toggle
-    enact_changes()
-    # undo_changes()
+    # Create a test user and board
+    owner_key = "test_owner_123"
+    board_name = "My Test Board"
+    
+    # Create new board
+    board_id = create_new_board(owner_key, board_name)
+    print(f"Created new board with ID: {board_id}")
+    
+    # Verify board was created by retrieving data
+    board_data = get_board_data(board_id)
+    print(f"Board data: {board_data}")
