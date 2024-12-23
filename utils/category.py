@@ -30,7 +30,18 @@ def edit_category(category_id, board_id, name=None, caption=None):
 
 def delete_category(category_id, board_id):
     """
-    Delete a category from the specified board.
+    Delete a category from the specified board and remove associated restaurants.
     """
+    # Fetch all restaurants under the board
+    restaurants_path = f"boards/{board_id}/restaurants"
+    restaurants = read_data(restaurants_path) or {}
+
+    # Filter and delete restaurants associated with the category
+    for restaurant_id, restaurant in restaurants.items():
+        if restaurant.get("category_id") == category_id:
+            delete_data(f"{restaurants_path}/{restaurant_id}")
+
+    # Delete the category itself
     path = f"boards/{board_id}/categories/{category_id}"
     delete_data(path)
+
