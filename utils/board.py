@@ -1,4 +1,4 @@
-from utils.firebase_helpers import write_data, read_data, update_data
+from utils.firebase import write_data, read_data, update_data
 
 def create_board(board_id, name):
     """
@@ -10,7 +10,7 @@ def create_board(board_id, name):
         "categories": {},  # Initialize as empty
         "members": []  # Initialize as empty
     }
-    write_data(path, board_data)
+    write_data(path, board_data)  # Ensure 'categories' is written
     return board_data
 
 

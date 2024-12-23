@@ -1,6 +1,6 @@
 import unittest
-from utils.restaurant_management import add_restaurant, edit_restaurant_rating, edit_restaurant_notes, add_visit_to_restaurant, edit_restaurant_dishes, delete_restaurant
-from utils.firebase_helpers import write_data, read_data, delete_data
+from utils.restaurant import add_restaurant, edit_restaurant_rating, edit_restaurant_notes, add_visit_to_restaurant, edit_restaurant_dishes, delete_restaurant, move_restaurant_category
+from utils.firebase import write_data, read_data, delete_data
 
 class TestRestaurantManagement(unittest.TestCase):
     
@@ -42,6 +42,14 @@ class TestRestaurantManagement(unittest.TestCase):
         self.assertEqual(restaurant["rating_1"], 7.0)
         self.assertEqual(restaurant["rating_2"], 8.0)
 
+    def test_edit_restaurant_notes(self):
+        """Test editing the notes of a restaurant."""
+        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
+        new_notes = "Updated: Excellent service and ambiance"
+        edit_restaurant_notes(self.category_id, self.restaurant_id, new_notes)
+        restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
+        self.assertEqual(restaurant["notes"], new_notes)
+
     def test_add_visit_to_restaurant(self):
         """Test adding a visit date to a restaurant."""
         add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
@@ -63,6 +71,18 @@ class TestRestaurantManagement(unittest.TestCase):
         delete_restaurant(self.category_id, self.restaurant_id)
         restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
         self.assertIsNone(restaurant)
+
+    def test_move_restaurant_category(self):
+        new_category_id = "cat_002"
+        write_data(f"categories/{new_category_id}", {"name": "Casual Dining"})
+        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
+        move_restaurant_category(self.category_id, new_category_id, self.restaurant_id)
+        restaurant_in_new = read_data(f"categories/{new_category_id}/restaurants/{self.restaurant_id}")
+        self.assertIsNotNone(restaurant_in_new)
+        self.assertEqual(restaurant_in_new["name"], self.restaurant_data["name"])
+        restaurant_in_old = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
+        self.assertIsNone(restaurant_in_old)
+        delete_data(f"categories/{new_category_id}")
 
 if __name__ == "__main__":
     unittest.main()

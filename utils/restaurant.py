@@ -1,4 +1,4 @@
-from utils.firebase_helpers import write_data, read_data, update_data, delete_data
+from utils.firebase import write_data, read_data, update_data, delete_data
 
 def add_restaurant(category_id, restaurant_id, data):
     """
@@ -84,3 +84,25 @@ def delete_restaurant(category_id, restaurant_id):
     """
     path = f"categories/{category_id}/restaurants/{restaurant_id}"
     delete_data(path)
+
+
+def move_restaurant_category(old_category_id, new_category_id, restaurant_id):
+    """
+    Move a restaurant from one category to another.
+    :param old_category_id: The current category ID of the restaurant.
+    :param new_category_id: The category ID to move the restaurant to.
+    :param restaurant_id: The restaurant ID to move.
+    """
+    # Get the restaurant data from the old category
+    old_path = f"categories/{old_category_id}/restaurants/{restaurant_id}"
+    restaurant_data = read_data(old_path)
+    
+    if not restaurant_data:
+        raise ValueError(f"Restaurant {restaurant_id} not found in category {old_category_id}")
+        
+    # Write the restaurant data to the new category
+    new_path = f"categories/{new_category_id}/restaurants/{restaurant_id}"
+    write_data(new_path, restaurant_data)
+    
+    # Delete the restaurant from the old category
+    delete_data(old_path)

@@ -1,4 +1,4 @@
-from utils.firebase_helpers import write_data, read_data, update_data
+from utils.firebase import write_data, read_data, update_data
 
 def create_user(user_key, boards=[]):
     path = f"users/{user_key}"

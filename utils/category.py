@@ -1,4 +1,4 @@
-from utils.firebase_helpers import write_data, read_data, update_data, delete_data
+from utils.firebase import write_data, read_data, update_data, delete_data
 
 def add_category(category_id, board_id, name, caption):
     """

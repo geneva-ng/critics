@@ -1,7 +1,7 @@
-from utils.firebase_helpers import initialize_firebase, read_data, delete_data
-from utils.board_management import create_board, edit_board
-from utils.category_management import add_category, edit_category
-from utils.restaurant_management import add_restaurant, edit_restaurant_rating, edit_restaurant_dishes
+from utils.firebase import initialize_firebase, read_data, delete_data
+from utils.board import create_board, edit_board
+from utils.category import add_category, edit_category
+from utils.restaurant import add_restaurant, edit_restaurant_rating, edit_restaurant_dishes
 
 # Initialize Firebase
 initialize_firebase("./gcreds_test.json", "https://critics-4bf98-default-rtdb.firebaseio.com/")

@@ -1,6 +1,6 @@
 import unittest
-from utils.category_management import add_category, edit_category, delete_category
-from utils.firebase_helpers import read_data, delete_data
+from utils.category import add_category, edit_category, delete_category
+from utils.firebase import read_data, delete_data
 
 class TestCategoryManagement(unittest.TestCase):
 
