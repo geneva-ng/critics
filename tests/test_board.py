@@ -31,12 +31,7 @@ class TestBoardManagement(unittest.TestCase):
         """Test creating a new board."""
         create_board(self.board_id, self.board_name)
         board_data = read_data(f"boards/{self.board_id}")
-        self.assertEqual(board_data["name"], self.board_name)  # Verify name is set correctly
-        # Remove or update these assertions if categories and members aren't part of initial board creation
-        # self.assertIn("categories", board_data)
-        # self.assertEqual(board_data["categories"], {})
-        # self.assertIn("members", board_data)
-        # self.assertEqual(board_data["members"], [])
+        self.assertEqual(board_data["name"], self.board_name)
 
     def test_edit_board(self):
         """Test editing a board's name."""
@@ -87,15 +82,14 @@ class TestBoardManagement(unittest.TestCase):
         # Delete board with any user_key
         delete_board(board_id, user_key)
         
-        # Debug print
-        user_boards = get_user_boards(user_key)
-        
         # Verify cleanup
+        user_boards = get_user_boards(user_key)
         self.assertIsNotNone(user_boards, "user_boards should not be None")
         self.assertIsInstance(user_boards, list, "user_boards should be a list")
         self.assertNotIn(board_id, user_boards)
+        
         board_data = get_board_data(board_id)
-        self.assertIsNone(board_data)
+        self.assertIsNone(board_data, "Expected board_data to be None after deletion")
 
 
 if __name__ == "__main__":

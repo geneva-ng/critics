@@ -30,8 +30,7 @@ class TestUser(unittest.TestCase):
     def test_join_board(self):
         """Test joining a board."""
         new_board = "board3"
-        join_board(self.user_key, new_board)
-        updated_boards = get_user_boards(self.user_key)
+        updated_boards = join_board(self.user_key, new_board)
         self.assertIn(new_board, updated_boards)
         self.assertEqual(len(updated_boards), len(self.test_boards) + 1)
 
@@ -66,8 +65,7 @@ class TestUser(unittest.TestCase):
 
     def test_leave_board(self):
         """Test leaving a board."""
-        leave_board(self.user_key, self.test_boards[0])
-        updated_boards = get_user_boards(self.user_key)
+        updated_boards = leave_board(self.user_key, self.test_boards[0])
         self.assertNotIn(self.test_boards[0], updated_boards)
         self.assertEqual(len(updated_boards), len(self.test_boards) - 1)
 

@@ -30,16 +30,14 @@ def get_board_data(board_id):
     Retrieve data for a specific board.
     """
     path = f"boards/{board_id}"
-    return read_data(path)
+    return read_data(path)  # Return None if no data is found, according to read_data in firebase.py
 
 def add_member_to_board(board_id, user_key):
     """
     Add a member to the specified board.
-    :param board_id: The unique ID of the board.
-    :param user_key: The unique ID of the user to add as a member.
     """
     path = f"boards/{board_id}/members"
-    members = read_data(path) or []  # Retrieve current members or initialize as empty
+    members = read_data(path) or []  # Ensure a list is always returned
     if user_key not in members:
         members.append(user_key)
         update_data(f"boards/{board_id}", {"members": members})
@@ -66,7 +64,16 @@ def delete_board(board_id, user_key):
                 user_boards.remove(board_id)
                 update_data(f"users/{member_key}", {"boards": user_boards})
     
-    # Delete the board and all its nested data
-    path = f"boards/{board_id}"
-    delete_data(path)
+    # Explicitly remove all members from the board
+    if "members" in board_data:
+        for member_key in board_data["members"]:
+            delete_data(f"boards/{board_id}/members/{member_key}")
+    
+    # Delete all categories under the board
+    if "categories" in board_data:
+        for category_id in board_data["categories"]:
+            delete_data(f"boards/{board_id}/categories/{category_id}")
+    
+    # Delete the board itself
+    delete_data(f"boards/{board_id}")
 

@@ -44,4 +44,5 @@ def delete_category(category_id, board_id):
     # Delete the category itself
     path = f"boards/{board_id}/categories/{category_id}"
     delete_data(path)
+    return None  # Explicitly return None for consistency
 

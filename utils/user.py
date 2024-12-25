@@ -12,20 +12,31 @@ def create_user(user_key, boards=[]):
     return user_data
 
 def get_user_boards(user_key):
+    """
+    Retrieve the list of boards a user is part of.
+    """
     path = f"users/{user_key}/boards"
-    return read_data(path) or []
+    return read_data(path) or []  # Ensure a list is always returned
 
 def join_board(user_key, board_code):
-    boards = get_user_boards(user_key) or []
+    """
+    Add a user to a board.
+    """
+    boards = get_user_boards(user_key)
     if board_code not in boards:
         boards.append(board_code)
         update_data(f"users/{user_key}", {"boards": boards})
+    return boards  # Return updated boards for confirmation
 
 def leave_board(user_key, board_code):
-    boards = get_user_boards(user_key) or []
+    """
+    Remove a user from a board.
+    """
+    boards = get_user_boards(user_key)
     if board_code in boards:
         boards.remove(board_code)
         update_data(f"users/{user_key}", {"boards": boards})
+    return boards  # Return updated boards for confirmation
 
 def update_last_active(user_key):
     """

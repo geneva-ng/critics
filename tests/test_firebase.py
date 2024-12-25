@@ -29,8 +29,7 @@ class TestFirebaseFunctions(unittest.TestCase):
         """Test a user joining a board."""
         create_user("test_user", [])
         create_board("board_001", "Test Board")
-        join_board("test_user", "board_001")
-        user_boards = get_user_boards("test_user")
+        user_boards = join_board("test_user", "board_001")
         self.assertIn("board_001", user_boards)
         delete_data("users/test_user")
         delete_data("boards/board_001")

@@ -63,6 +63,7 @@ def add_visit_to_restaurant(category_id, restaurant_id, visit_date):
     visits = read_data(path) or []
     visits.append(visit_date)
     write_data(path, visits)
+    return visits
 
 
 def edit_restaurant_dishes(category_id, restaurant_id, dishes):

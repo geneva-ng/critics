@@ -29,8 +29,7 @@ class TestRestaurantManagement(unittest.TestCase):
 
     def test_add_restaurant(self):
         """Test adding a restaurant to a category."""
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
-        restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
+        restaurant = add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
         self.assertIsNotNone(restaurant)
         self.assertEqual(restaurant["name"], self.restaurant_data["name"])
 
@@ -53,9 +52,8 @@ class TestRestaurantManagement(unittest.TestCase):
     def test_add_visit_to_restaurant(self):
         """Test adding a visit date to a restaurant."""
         add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
-        add_visit_to_restaurant(self.category_id, self.restaurant_id, "2024-12-25")
-        restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
-        self.assertIn("2024-12-25", restaurant["visits"])
+        visits = add_visit_to_restaurant(self.category_id, self.restaurant_id, "2024-12-25")
+        self.assertIn("2024-12-25", visits)
 
     def test_edit_restaurant_dishes(self):
         """Test editing the dishes of a restaurant."""

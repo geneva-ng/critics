@@ -18,7 +18,8 @@ def update_data(path, data):
 
 def read_data(path):
     ref = db.reference(path)
-    return ref.get()
+    data = ref.get()
+    return None if data == {} else data  # Return None if data is an empty dictionary or None
 
 def delete_data(path):
     ref = db.reference(path)
