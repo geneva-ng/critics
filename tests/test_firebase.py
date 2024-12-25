@@ -14,7 +14,7 @@ class TestFirebaseFunctions(unittest.TestCase):
         """Test creating a new user and assigning a board."""
         create_user("test_user", ["board_001"])
         user_data = read_data("users/test_user")
-        self.assertEqual(user_data["user_key"], "test_user")
+        self.assertEqual(user_data["user_id"], "test_user")
         self.assertIn("board_001", user_data["boards"])
         delete_data("users/test_user")
 

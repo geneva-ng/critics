@@ -1,6 +1,6 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
 
-def create_board(board_id, name):
+def create_board(board_id, name, owner):
     """
     Create a new board with a unique ID and a human-readable name.
     """
@@ -8,7 +8,8 @@ def create_board(board_id, name):
     board_data = {
         "name": name,
         "categories": {},  # Initialize as empty
-        "members": []  # Initialize as empty
+        "members": [],  # Initialize as empty
+        "owner": owner  # Initialize as empty              NOTE: this is new. The tests will need to be updated.
     }
     write_data(path, board_data)  # Ensure 'categories' is written
     return board_data
@@ -32,23 +33,23 @@ def get_board_data(board_id):
     path = f"boards/{board_id}"
     return read_data(path)  # Return None if no data is found, according to read_data in firebase.py
 
-def add_member_to_board(board_id, user_key):
+def add_member_to_board(board_id, user_id):
     """
     Add a member to the specified board.
     """
     path = f"boards/{board_id}/members"
     members = read_data(path) or []  # Ensure a list is always returned
-    if user_key not in members:
-        members.append(user_key)
+    if user_id not in members:
+        members.append(user_id)
         update_data(f"boards/{board_id}", {"members": members})
     else:
-        raise ValueError(f"User {user_key} is already a member of board {board_id}.")
+        raise ValueError(f"User {user_id} is already a member of board {board_id}.")
     
-def delete_board(board_id, user_key):
+def delete_board(board_id, user_id):
     """
     Delete a board and all its associated data.
     :param board_id: The unique ID of the board to delete.
-    :param user_key: The user attempting to delete the board.
+    :param user_id: The user attempting to delete the board.
     """
     # Get board data first to access member list
     board_data = read_data(f"boards/{board_id}")

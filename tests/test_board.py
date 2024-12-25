@@ -75,15 +75,15 @@ class TestBoardManagement(unittest.TestCase):
         create_board(board_id, "Test Board")
         
         # Create test user and add to board
-        user_key = "test_user"
-        create_user(user_key, [board_id])
-        add_member_to_board(board_id, user_key)
+        user_id = "test_user"
+        create_user(user_id, [board_id])
+        add_member_to_board(board_id, user_id)
         
-        # Delete board with any user_key
-        delete_board(board_id, user_key)
+        # Delete board with any user_id
+        delete_board(board_id, user_id)
         
         # Verify cleanup
-        user_boards = get_user_boards(user_key)
+        user_boards = get_user_boards(user_id)
         self.assertIsNotNone(user_boards, "user_boards should not be None")
         self.assertIsInstance(user_boards, list, "user_boards should be a list")
         self.assertNotIn(board_id, user_boards)

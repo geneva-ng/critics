@@ -18,11 +18,11 @@ ref = db.reference('/')
 data = {
     "users": {
         "user1": {
-            "user_key": "abc123",
+            "user_id": "abc123",
             "boards": ["board123"]
         },
         "user2": {
-            "user_key": "xyz789",
+            "user_id": "xyz789",
             "boards": ["board123"]
         }
     },
