@@ -7,7 +7,18 @@ def add_restaurant(category_id, restaurant_id, data):
     :param restaurant_id: The unique ID for the restaurant.
     :param data: Dictionary containing restaurant details.
     """
-    required_fields = ["name", "rating_1", "rating_2", "rating_3", "notes", "visits", "location", "dishes", "photo"]
+    required_fields = [
+        "name",
+        "rating_1", 
+        "rating_2",
+        "rating_3",
+        "notes",
+        "visits", # list of date strings
+        "location",
+        "dishes",
+        "photo"
+    ]
+
     for field in required_fields:
         if field not in data:
             raise KeyError(f"Missing required field: {field}")

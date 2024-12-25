@@ -1,12 +1,12 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
 
-def add_category(category_id, board_id, name, caption):
+def add_category(category_id, name, caption):
     """
     Add a category to the specified board.
     """
     if not category_id or not isinstance(category_id, str):
         raise ValueError("Invalid category ID: must be a non-empty string.")
-    path = f"boards/{board_id}/categories/{category_id}"
+    path = f"categories/{category_id}"
     category_data = {
         "name": name,
         "caption": caption

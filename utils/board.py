@@ -7,7 +7,7 @@ def create_board(board_id, name, owner):
     path = f"boards/{board_id}"
     board_data = {
         "name": name,
-        "categories": {},  # Initialize as empty
+        "categories": [],  # Initialize as empty
         "members": [],  # Initialize as empty
         "owner": owner  # Initialize as empty              NOTE: this is new. The tests will need to be updated.
     }
@@ -44,6 +44,19 @@ def add_member_to_board(board_id, user_id):
         update_data(f"boards/{board_id}", {"members": members})
     else:
         raise ValueError(f"User {user_id} is already a member of board {board_id}.")
+    
+def add_category_to_board(board_id, category_id):
+    """
+    Add a category to the specified board.
+    """
+    path = f"boards/{board_id}/categories"
+    categories = read_data(path) or []  # Ensure a list is always returned
+    if category_id not in categories:
+        categories.append(category_id)
+        update_data(f"boards/{board_id}", {"categories": categories})
+    else:
+        raise ValueError(f"Category {category_id} is already in board {board_id}.")
+
     
 def delete_board(board_id, user_id):
     """
