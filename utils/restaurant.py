@@ -1,9 +1,10 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
+from utils.category import add_restaurant_to_category, remove_restaurant_from_category
 
-def add_restaurant(category_id, restaurant_id, data):
+def create_restaurant(category_id, restaurant_id, data):
     """
-    Add a restaurant to a category.
-    :param category_id: The category ID to add the restaurant to.
+    Add a restaurant and associate it with a category.
+    :param category_id: The category ID to associate the restaurant with.
     :param restaurant_id: The unique ID for the restaurant.
     :param data: Dictionary containing restaurant details.
     """
@@ -28,93 +29,158 @@ def add_restaurant(category_id, restaurant_id, data):
         if not isinstance(data[rating_field], (int, float)) or not (0 <= data[rating_field] <= 10):
             raise ValueError(f"{rating_field} must be a number between 0 and 10.")
 
-    path = f"categories/{category_id}/restaurants/{restaurant_id}"
-    write_data(path, data)
+    # Add category reference to restaurant data
+    restaurant_data = data.copy()
+    restaurant_data["category_code"] = category_id
+
+    path = f"restaurants/{restaurant_id}"
+    write_data(path, restaurant_data)
+
+    # Add restaurant to category, on the category-side
+    add_restaurant_to_category(category_id, restaurant_id)
+
+    return restaurant_data
+
+def edit_rating(restaurant_id, rating_number, rating_value):
+    """
+    Edit a specific rating of a restaurant.
+    :param restaurant_id: The restaurant ID to update.
+    :param rating_number: Integer 1-3 specifying which rating to update.
+    :param rating_value: The new rating value.
+    """
+    if not isinstance(rating_number, int) or rating_number not in [1, 2, 3]:
+        raise ValueError("rating_number must be 1, 2, or 3")
+
+    if not isinstance(rating_value, (int, float)) or not (0 <= rating_value <= 10):
+        raise ValueError("rating_value must be a number between 0 and 10")
+
+    rating_field = f"rating_{rating_number}"
+    data = {rating_field: rating_value}
+
+    path = f"restaurants/{restaurant_id}"
+    update_data(path, data)
     return data
 
-
-def edit_restaurant_rating(category_id, restaurant_id, rating_1=None, rating_2=None, rating_3=None):
-    """
-    Edit the ratings of a restaurant.
-    :param category_id: The category ID the restaurant belongs to.
-    :param restaurant_id: The restaurant ID to update.
-    :param rating_1, rating_2, rating_3: New ratings.
-    """
-    path = f"categories/{category_id}/restaurants/{restaurant_id}"
-    updates = {}
-    if rating_1 is not None:
-        updates["rating_1"] = rating_1
-    if rating_2 is not None:
-        updates["rating_2"] = rating_2
-    if rating_3 is not None:
-        updates["rating_3"] = rating_3
-    update_data(path, updates)
-    return updates
-
-
-def edit_restaurant_notes(category_id, restaurant_id, notes):
+def edit_notes(restaurant_id, notes):
     """
     Edit the notes for a restaurant.
-    :param category_id: The category ID the restaurant belongs to.
     :param restaurant_id: The restaurant ID to update.
-    :param notes: New notes for the restaurant.
+    :param notes: String containing the new notes.
     """
-    path = f"categories/{category_id}/restaurants/{restaurant_id}"
-    update_data(path, {"notes": notes})
+    if not isinstance(notes, str):
+        raise ValueError("notes must be a string")
 
+    data = {"notes": notes}
+    path = f"restaurants/{restaurant_id}"
+    update_data(path, data)
+    return data
 
-def add_visit_to_restaurant(category_id, restaurant_id, visit_date):
+def add_visit(restaurant_id, visit_date):
     """
     Add a visit date to a restaurant.
-    :param category_id: The category ID the restaurant belongs to.
     :param restaurant_id: The restaurant ID to update.
-    :param visit_date: The date of the visit.
+    :param visit_date: String containing the visit date.
     """
-    path = f"categories/{category_id}/restaurants/{restaurant_id}/visits"
+    if not isinstance(visit_date, str):
+        raise ValueError("visit_date must be a string")
+
+    path = f"restaurants/{restaurant_id}/visits"
     visits = read_data(path) or []
     visits.append(visit_date)
     write_data(path, visits)
     return visits
 
+def delete_visit(restaurant_id):
+    """
+    Delete the most recent visit date from a restaurant.
+    :param restaurant_id: The restaurant ID to update.
+    """
+    path = f"restaurants/{restaurant_id}/visits"
+    visits = read_data(path) or []
+    if visits:
+        visits.pop()
+        write_data(path, visits)
+    return visits
 
-def edit_restaurant_dishes(category_id, restaurant_id, dishes):
+def edit_dish_ranking(restaurant_id, dishes):
     """
     Edit the dishes for a restaurant.
-    :param category_id: The category ID the restaurant belongs to.
     :param restaurant_id: The restaurant ID to update.
-    :param dishes: List of dishes for the restaurant.
+    :param dishes: Array containing the new ordered list of dishes.
     """
-    path = f"categories/{category_id}/restaurants/{restaurant_id}/dishes"
+    if not isinstance(dishes, list):
+        raise ValueError("dishes must be an array")
+
+    path = f"restaurants/{restaurant_id}/dishes"
     write_data(path, dishes)
+    return dishes
 
+def add_dish(restaurant_id, dish):
+    """
+    Add a dish to a restaurant.
+    :param restaurant_id: The restaurant ID to update.
+    :param dish: String containing the dish name to add.
+    """
+    if not isinstance(dish, str):
+        raise ValueError("dish must be a string")
 
-def delete_restaurant(category_id, restaurant_id):
+    path = f"restaurants/{restaurant_id}/dishes"
+    dishes = read_data(path) or []
+    dishes.append(dish)
+    write_data(path, dishes)
+    return dishes
+
+def delete_dish(restaurant_id, dish):
+    """
+    Delete a dish from a restaurant.
+    :param restaurant_id: The restaurant ID to update.
+    :param dish: String containing the dish name to delete.
+    """
+    if not isinstance(dish, str):
+        raise ValueError("dish must be a string")
+
+    path = f"restaurants/{restaurant_id}/dishes"
+    dishes = read_data(path) or []
+    dishes.remove(dish)
+    write_data(path, dishes)
+    return dishes
+
+def delete_restaurant(restaurant_id):
     """
     Delete a restaurant.
-    :param category_id: The category ID the restaurant belongs to.
     :param restaurant_id: The restaurant ID to delete.
     """
-    path = f"categories/{category_id}/restaurants/{restaurant_id}"
+    path = f"restaurants/{restaurant_id}"
+
+    # Remove restaurant from category, on the category-side
+    restaurant_data = read_data(path)
+    if restaurant_data and "category_code" in restaurant_data:
+        remove_restaurant_from_category(restaurant_data["category_code"], restaurant_id)
+
     delete_data(path)
 
+def switch_restaurant_category(restaurant_id, new_category_id):
+    """
+    Change a restaurant's category.
+    :param restaurant_id: The restaurant ID to update.
+    :param new_category_id: String containing the new category ID.
+    """
+    if not isinstance(new_category_id, str):
+        raise ValueError("Category ID must be a string")
 
-def move_restaurant_category(old_category_id, new_category_id, restaurant_id):
-    """
-    Move a restaurant from one category to another.
-    :param old_category_id: The current category ID of the restaurant.
-    :param new_category_id: The category ID to move the restaurant to.
-    :param restaurant_id: The restaurant ID to move.
-    """
-    # Get the restaurant data from the old category
-    old_path = f"categories/{old_category_id}/restaurants/{restaurant_id}"
-    restaurant_data = read_data(old_path)
+    path = f"restaurants/{restaurant_id}"
+    restaurant_data = read_data(path)
     
     if not restaurant_data:
-        raise ValueError(f"Restaurant {restaurant_id} not found in category {old_category_id}")
+        raise ValueError(f"Restaurant {restaurant_id} not found")
         
-    # Write the restaurant data to the new category
-    new_path = f"categories/{new_category_id}/restaurants/{restaurant_id}"
-    write_data(new_path, restaurant_data)
-    
-    # Delete the restaurant from the old category
-    delete_data(old_path)
+    restaurant_data["category_code"] = new_category_id
+    write_data(path, restaurant_data)
+
+    # Remove restaurant from old category, on the category-side
+    remove_restaurant_from_category(restaurant_id, restaurant_data["category_code"])
+
+    # Add restaurant to new category, on the category-side
+    add_restaurant_to_category(new_category_id, restaurant_id)
+
+    return restaurant_data

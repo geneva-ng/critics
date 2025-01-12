@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 from utils.firebase import write_data, delete_data, read_data
-from utils.user import create_user, get_user_boards, join_board, delete_user, update_last_active, leave_board
+from utils.user import create_user, get_user_boards, add_board_to_user, delete_user, update_last_active, remove_board_from_user
 
 class TestUser(unittest.TestCase):
     def setUp(self):
@@ -27,17 +27,17 @@ class TestUser(unittest.TestCase):
         boards = get_user_boards(self.user_id)
         self.assertEqual(boards, self.test_boards)
 
-    def test_join_board(self):
+    def test_add_board_to_user(self):
         """Test joining a board."""
         new_board = "board3"
-        updated_boards = join_board(self.user_id, new_board)
+        updated_boards = add_board_to_user(self.user_id, new_board)
         self.assertIn(new_board, updated_boards)
         self.assertEqual(len(updated_boards), len(self.test_boards) + 1)
 
-    def test_join_board_duplicate(self):
+    def test_add_board_to_user_duplicate(self):
         """Test joining a board that user is already member of."""
         existing_board = self.test_boards[0]
-        join_board(self.user_id, existing_board)
+        add_board_to_user(self.user_id, existing_board)
         updated_boards = get_user_boards(self.user_id)
         self.assertEqual(len(updated_boards), len(self.test_boards))
 
@@ -63,9 +63,9 @@ class TestUser(unittest.TestCase):
         # Assert that user data is None after deletion
         self.assertIsNone(user_data)
 
-    def test_leave_board(self):
+    def test_remove_board_from_user(self):
         """Test leaving a board."""
-        updated_boards = leave_board(self.user_id, self.test_boards[0])
+        updated_boards = remove_board_from_user(self.user_id, self.test_boards[0])
         self.assertNotIn(self.test_boards[0], updated_boards)
         self.assertEqual(len(updated_boards), len(self.test_boards) - 1)
 

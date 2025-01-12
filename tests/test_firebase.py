@@ -1,7 +1,7 @@
 import unittest
 from utils.firebase import initialize_firebase, read_data, delete_data
-from utils.user import create_user, get_user_boards, join_board
-from utils.board import create_board, get_board_data, add_member_to_board
+from utils.user import create_user, get_user_boards, add_board_to_user
+from utils.board import create_board, get_board_data, add_user_to_board
 
 class TestFirebaseFunctions(unittest.TestCase):
 
@@ -25,19 +25,19 @@ class TestFirebaseFunctions(unittest.TestCase):
         self.assertEqual(board_data["name"], "Test Board")
         delete_data("boards/board_001")
 
-    def test_join_board(self):
+    def test_add_board_to_user(self):
         """Test a user joining a board."""
         create_user("test_user", [])
         create_board("board_001", "Test Board")
-        user_boards = join_board("test_user", "board_001")
+        user_boards = add_board_to_user("test_user", "board_001")
         self.assertIn("board_001", user_boards)
         delete_data("users/test_user")
         delete_data("boards/board_001")
     
-    def test_add_member_to_board(self):
+    def test_add_user_to_board(self):
         """Test adding a new member to a board."""
         create_board("board_001", "Test Board")
-        add_member_to_board("board_001", "new_member")
+        add_user_to_board("board_001", "new_member")
         board_data = get_board_data("board_001")
         self.assertIn("new_member", board_data["members"])
         delete_data("boards/board_001")

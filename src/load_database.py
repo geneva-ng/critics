@@ -1,3 +1,9 @@
+"""
+This script is used to load the database with the provided schema.
+I don't think this is needed anymore, but I'm keeping it here just in case.
+"""
+
+
 import firebase_admin
 from firebase_admin import credentials, db
 

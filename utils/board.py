@@ -14,8 +14,7 @@ def create_board(board_id, name, owner):
     write_data(path, board_data)  # Ensure 'categories' is written
     return board_data
 
-
-def edit_board(board_id, name=None):
+def edit_board_name(board_id, name=None):
     """
     Edit an existing board's name.
     """
@@ -25,7 +24,6 @@ def edit_board(board_id, name=None):
         updates["name"] = name
     update_data(path, updates)
 
-
 def get_board_data(board_id):
     """
     Retrieve data for a specific board.
@@ -33,9 +31,9 @@ def get_board_data(board_id):
     path = f"boards/{board_id}"
     return read_data(path)  # Return None if no data is found, according to read_data in firebase.py
 
-def add_member_to_board(board_id, user_id):
+def add_user_to_board(board_id, user_id):
     """
-    Add a member to the specified board.
+    Add a user to the board's list of members.
     """
     path = f"boards/{board_id}/members"
     members = read_data(path) or []  # Ensure a list is always returned
@@ -45,7 +43,17 @@ def add_member_to_board(board_id, user_id):
     else:
         raise ValueError(f"User {user_id} is already a member of board {board_id}.")
     
-def add_category_to_board(board_id, category_id):
+def remove_user_from_board(board_id, user_id):
+    """
+    Remove a user from the board's list of members.
+    """
+    path = f"boards/{board_id}/members"
+    members = read_data(path) or []  # Ensure a list is always returned
+    if user_id in members:
+        members.remove(user_id)
+        update_data(f"boards/{board_id}", {"members": members})
+
+def link_category_to_board(board_id, category_id):
     """
     Add a category to the specified board.
     """
@@ -56,8 +64,7 @@ def add_category_to_board(board_id, category_id):
         update_data(f"boards/{board_id}", {"categories": categories})
     else:
         raise ValueError(f"Category {category_id} is already in board {board_id}.")
-
-    
+ 
 def delete_board(board_id, user_id):
     """
     Delete a board and all its associated data.
@@ -68,6 +75,10 @@ def delete_board(board_id, user_id):
     board_data = read_data(f"boards/{board_id}")
     if not board_data:
         raise ValueError(f"Board {board_id} not found")
+        
+    # Verify user is the owner
+    if board_data.get("owner") != user_id:
+        raise ValueError("Only the board owner can delete the board")
         
     # Clean up user references
     if "members" in board_data:

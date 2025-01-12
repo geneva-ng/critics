@@ -1,0 +1,78 @@
+{
+  "boards": {
+    "board_001": {
+      "categories": [
+        "category_001",
+        "category_002"
+      ],
+      "members": [
+        "user_001",
+        "user_002"
+      ],
+      "name": "Genny's Board",
+      "owner": "user_001"
+    }
+  },
+  "categories": {
+    "category_001": {
+      "caption": "Can't tell if we go to dine, or to dress up.",
+      "name": "Fine Dining",
+      "restaurants": {
+        "restaurant_001": {
+          "dishes": [
+            "Roasted Beet Salad",
+            "Filet Mignon",
+            "Chocolate Cake"
+          ],
+          "location": "9 W 57th St, New York, NY 10019",
+          "name": "The Modern",
+          "notes": "The food was good, but the service was a bit slow.",
+          "photo": "https://www.themodern.com/images/the-modern-restaurant-exterior.jpg",
+          "rating_1": 9.1,
+          "rating_2": 8,
+          "rating_3": 7,
+          "visits": [
+            "2023-05-15",
+            "2023-07-22",
+            "2023-09-03"
+          ]
+        },
+        "restaurant_002": {
+          "dishes": [
+            "Tuna Tartare",
+            "Lobster",
+            "Chocolate-Olive Oil Dessert"
+          ],
+          "location": "155 W 51st St, New York, NY 10019",
+          "name": "Le Bernardin",
+          "notes": "Exceptional seafood tasting menu. Service was impeccable.",
+          "photo": "https://www.le-bernardin.com/uploads/images/gallery/exterior.jpg",
+          "rating_1": 9,
+          "rating_2": 8,
+          "rating_3": 7,
+          "visits": [
+            "2023-08-12"
+          ]
+        }
+      }
+    },
+    "category_002": {
+      "caption": "Just another weekend",
+      "name": "Casual Dining"
+    }
+  },
+  "users": {
+    "user_001": {
+      "boards": [
+        "board_001"
+      ],
+      "name": "Geneva"
+    },
+    "user_002": {
+      "boards": [
+        "board_001"
+      ],
+      "name": "Chris"
+    }
+  }
+}

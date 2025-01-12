@@ -1,3 +1,4 @@
+from utils.board import remove_user_from_board
 from utils.firebase import write_data, read_data, update_data, delete_data
 from datetime import datetime
 
@@ -18,9 +19,9 @@ def get_user_boards(user_id):
     path = f"users/{user_id}/boards"
     return read_data(path) or []  # Ensure a list is always returned
 
-def join_board(user_id, board_code):
+def add_board_to_user(user_id, board_code):
     """
-    Add a user to a board.
+    Adds a board to a user's list of boards.
     """
     boards = get_user_boards(user_id)
     if board_code not in boards:
@@ -28,9 +29,9 @@ def join_board(user_id, board_code):
         update_data(f"users/{user_id}", {"boards": boards})
     return boards  # Return updated boards for confirmation
 
-def leave_board(user_id, board_code):
+def remove_board_from_user(user_id, board_code):
     """
-    Remove a user from a board.
+    Remove a board from a user's list of boards.
     """
     boards = get_user_boards(user_id)
     if board_code in boards:
@@ -38,20 +39,19 @@ def leave_board(user_id, board_code):
         update_data(f"users/{user_id}", {"boards": boards})
     return boards  # Return updated boards for confirmation
 
-def update_last_active(user_id):
-    """
-    Update the last_active timestamp for a user to the current date.
-    :param user_id: The unique ID of the user to update.
-    """
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    update_data(f"users/{user_id}", {"last_active": current_date})
-
 def delete_user(user_id):
     """
     Delete a user and all their data.
     :param user_id: The unique ID of the user to delete.
     """
+
+    # Get user's boards and remove the user from each one before deleting the user
+    user_boards = get_user_boards(user_id)
+    for board_id in user_boards:
+        remove_user_from_board(board_id, user_id)
+    
     path = f"users/{user_id}"
     delete_data(path)
+
     # Ensure the function does not return anything or returns None explicitly
     return None

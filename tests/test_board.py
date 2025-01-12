@@ -1,7 +1,7 @@
 import unittest
 import firebase_admin
 from firebase_admin import credentials
-from utils.board import create_board, edit_board, get_board_data, add_member_to_board, delete_board
+from utils.board import create_board, edit_board_name, get_board_data, add_user_to_board, delete_board
 from utils.firebase import read_data, delete_data, update_data
 from utils.user import create_user, delete_user, get_user_boards
 
@@ -33,17 +33,17 @@ class TestBoardManagement(unittest.TestCase):
         board_data = read_data(f"boards/{self.board_id}")
         self.assertEqual(board_data["name"], self.board_name)
 
-    def test_edit_board(self):
+    def test_edit_board_name(self):
         """Test editing a board's name."""
         create_board(self.board_id, self.board_name)
-        edit_board(self.board_id, name="Updated Board Name")
+        edit_board_name(self.board_id, name="Updated Board Name")
         board_data = read_data(f"boards/{self.board_id}")
         self.assertEqual(board_data["name"], "Updated Board Name")
 
-    def test_add_member_to_board(self):
+    def test_add_user_to_board(self):
         """Test adding a new member to a board."""
         create_board(self.board_id, self.board_name)
-        add_member_to_board(self.board_id, "user_001")
+        add_user_to_board(self.board_id, "user_001")
         board_data = read_data(f"boards/{self.board_id}")
         self.assertIn("user_001", board_data["members"])
 
@@ -77,7 +77,7 @@ class TestBoardManagement(unittest.TestCase):
         # Create test user and add to board
         user_id = "test_user"
         create_user(user_id, [board_id])
-        add_member_to_board(board_id, user_id)
+        add_user_to_board(board_id, user_id)
         
         # Delete board with any user_id
         delete_board(board_id, user_id)

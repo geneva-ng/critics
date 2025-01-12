@@ -1,5 +1,5 @@
 import unittest
-from utils.restaurant import add_restaurant, edit_restaurant_rating, edit_restaurant_notes, add_visit_to_restaurant, edit_restaurant_dishes, delete_restaurant, move_restaurant_category
+from utils.restaurant import add_restaurant_to_category, edit_rating, edit_notes, add_visit, edit_dish_ranking, delete_restaurant, switch_restaurant_category
 from utils.firebase import write_data, read_data, delete_data
 
 class TestRestaurantManagement(unittest.TestCase):
@@ -27,54 +27,54 @@ class TestRestaurantManagement(unittest.TestCase):
         """Clean up after tests."""
         delete_data(f"categories/{self.category_id}")
 
-    def test_add_restaurant(self):
+    def test_add_restaurant_to_category(self):
         """Test adding a restaurant to a category."""
-        restaurant = add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
+        restaurant = add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
         self.assertIsNotNone(restaurant)
         self.assertEqual(restaurant["name"], self.restaurant_data["name"])
 
-    def test_edit_restaurant_rating(self):
+    def test_edit_rating(self):
         """Test editing the ratings of a restaurant."""
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
-        edit_restaurant_rating(self.category_id, self.restaurant_id, rating_1=7.0, rating_2=8.0)
+        add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
+        edit_rating(self.category_id, self.restaurant_id, rating_1=7.0, rating_2=8.0)
         restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
         self.assertEqual(restaurant["rating_1"], 7.0)
         self.assertEqual(restaurant["rating_2"], 8.0)
 
-    def test_edit_restaurant_notes(self):
+    def test_edit_notes(self):
         """Test editing the notes of a restaurant."""
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
+        add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
         new_notes = "Updated: Excellent service and ambiance"
-        edit_restaurant_notes(self.category_id, self.restaurant_id, new_notes)
+        edit_notes(self.category_id, self.restaurant_id, new_notes)
         restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
         self.assertEqual(restaurant["notes"], new_notes)
 
-    def test_add_visit_to_restaurant(self):
+    def test_add_visit(self):
         """Test adding a visit date to a restaurant."""
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
-        visits = add_visit_to_restaurant(self.category_id, self.restaurant_id, "2024-12-25")
+        add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
+        visits = add_visit(self.category_id, self.restaurant_id, "2024-12-25")
         self.assertIn("2024-12-25", visits)
 
-    def test_edit_restaurant_dishes(self):
+    def test_edit_dish_ranking(self):
         """Test editing the dishes of a restaurant."""
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
+        add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
         dishes = ["Grilled Avocado", "Tlayuda", "Short Rib Tacos"]
-        edit_restaurant_dishes(self.category_id, self.restaurant_id, dishes)
+        edit_dish_ranking(self.category_id, self.restaurant_id, dishes)
         restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
         self.assertEqual(restaurant["dishes"], dishes)
 
     def test_delete_restaurant(self):
         """Test deleting a restaurant."""
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
+        add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
         delete_restaurant(self.category_id, self.restaurant_id)
         restaurant = read_data(f"categories/{self.category_id}/restaurants/{self.restaurant_id}")
         self.assertIsNone(restaurant)
 
-    def test_move_restaurant_category(self):
+    def test_switch_restaurant_category(self):
         new_category_id = "cat_002"
         write_data(f"categories/{new_category_id}", {"name": "Casual Dining"})
-        add_restaurant(self.category_id, self.restaurant_id, self.restaurant_data)
-        move_restaurant_category(self.category_id, new_category_id, self.restaurant_id)
+        add_restaurant_to_category(self.category_id, self.restaurant_id, self.restaurant_data)
+        switch_restaurant_category(self.category_id, new_category_id, self.restaurant_id)
         restaurant_in_new = read_data(f"categories/{new_category_id}/restaurants/{self.restaurant_id}")
         self.assertIsNotNone(restaurant_in_new)
         self.assertEqual(restaurant_in_new["name"], self.restaurant_data["name"])

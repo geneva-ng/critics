@@ -1,5 +1,5 @@
 import unittest
-from utils.category import add_category, edit_category, delete_category
+from utils.category import create_category, edit_category_name_caption, delete_category
 from utils.firebase import read_data, delete_data, write_data
 
 class TestCategoryManagement(unittest.TestCase):
@@ -15,18 +15,18 @@ class TestCategoryManagement(unittest.TestCase):
         """Clean up after tests."""
         delete_data(f"boards/{self.board_id}/categories/{self.category_id}")
 
-    def test_add_category(self):
+    def test_create_category(self):
         """Test adding a category."""
-        add_category(self.category_id, self.board_id, self.category_name, self.category_caption)
+        create_category(self.category_id, self.board_id, self.category_name, self.category_caption)
         category = read_data(f"boards/{self.board_id}/categories/{self.category_id}")
         self.assertIsNotNone(category)
         self.assertEqual(category["name"], self.category_name)
         self.assertEqual(category["caption"], self.category_caption)
 
-    def test_edit_category(self):
+    def test_edit_category_name_caption(self):
         """Test editing a category's name and caption."""
-        add_category(self.category_id, self.board_id, self.category_name, self.category_caption)
-        edit_category(self.category_id, self.board_id, name="Updated Desserts", caption="Updated Caption")
+        create_category(self.category_id, self.board_id, self.category_name, self.category_caption)
+        edit_category_name_caption(self.category_id, self.board_id, name="Updated Desserts", caption="Updated Caption")
         category = read_data(f"boards/{self.board_id}/categories/{self.category_id}")
         self.assertEqual(category["name"], "Updated Desserts")
         self.assertEqual(category["caption"], "Updated Caption")
@@ -34,7 +34,7 @@ class TestCategoryManagement(unittest.TestCase):
     def test_delete_category_and_associated_restaurants(self):
         """Test deleting a category and ensuring associated restaurants are deleted."""
         # Add a category
-        add_category(self.category_id, self.board_id, self.category_name, self.category_caption)
+        create_category(self.category_id, self.board_id, self.category_name, self.category_caption)
 
         # Add a restaurant linked to this category
         restaurant_id = "rest_001"
