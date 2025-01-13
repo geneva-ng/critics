@@ -22,7 +22,7 @@ def create_restaurant(category_id, restaurant_id, data):
 
     for field in required_fields:
         if field not in data:
-            raise KeyError(f"Missing required field: {field}")
+            raise ValueError(f"Missing required field in restaurant creation: {field}")
 
     # Validate ratings
     for rating_field in ["rating_1", "rating_2", "rating_3"]:

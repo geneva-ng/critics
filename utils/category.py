@@ -1,4 +1,5 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
+from utils.board import unlink_category_from_board
 
 def create_category(category_id, name, caption):
     """
@@ -15,11 +16,11 @@ def create_category(category_id, name, caption):
     write_data(path, category_data)
     return category_data
 
-def edit_category_name_caption(category_id, board_id, name=None, caption=None):
+def edit_category_name_caption(category_id, name=None, caption=None):
     """
     Edit an existing category's name or caption.
     """
-    path = f"boards/{board_id}/categories/{category_id}"
+    path = f"categories/{category_id}"
     updates = {}
     if name:
         updates["name"] = name
@@ -31,18 +32,22 @@ def delete_category(category_id, board_id):
     """
     Delete a category from the specified board and remove associated restaurants.
     """
-    # Fetch all restaurants under the board
-    restaurants_path = f"boards/{board_id}/restaurants"
-    restaurants = read_data(restaurants_path) or {}
 
-    # Filter and delete restaurants associated with the category
-    for restaurant_id, restaurant in restaurants.items():
-        if restaurant.get("category_id") == category_id:
-            delete_data(f"{restaurants_path}/{restaurant_id}")
+    # Get all restaurants associated with the category
+    category_path = f"categories/{category_id}"
+    category_data = read_data(category_path) or {}
+    restaurants = category_data.get("restaurants", [])
 
-    # Delete the category itself
-    path = f"boards/{board_id}/categories/{category_id}"
-    delete_data(path)
+    # Delete each restaurant
+    for restaurant_id in restaurants:
+        delete_data(f"restaurants/{restaurant_id}")
+
+    # Unlink the category from the board
+    unlink_category_from_board(board_id, category_id)
+
+    # Delete the category
+    delete_data(category_path)
+
     return None  # Explicitly return None for consistency
 
 def add_restaurant_to_category(category_id, restaurant_id):
