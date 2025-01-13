@@ -1,7 +1,7 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
-from utils.board import unlink_category_from_board
+from utils.board import unlink_category_from_board, link_category_to_board
 
-def create_category(category_id, name, caption):
+def create_category(category_id, name, caption, board_id):
     """
     Add a category to the specified board.
     """
@@ -13,6 +13,10 @@ def create_category(category_id, name, caption):
         "caption": caption,
         "restaurants": []
     }
+
+    # add the category to the board
+    link_category_to_board(board_id, category_id)
+
     write_data(path, category_data)
     return category_data
 

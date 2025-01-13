@@ -1,0 +1,81 @@
+{
+    "boards": {
+      "board_001": {
+        "name": "Genny's Board",
+        "categories": ["category_003"],
+        "members": ["user_001"],
+        "owner": "user_001"
+      },
+      "board_002": {
+        "name": "Foodies United",
+        "categories": ["category_004"],
+        "members": ["user_002", "user_003"],
+        "owner": "user_002"
+      }
+    },
+    "categories": {
+      "category_003": {
+        "name": "Fine Dining",
+        "caption": "Can't tell if we go to dine, or to dress up.",
+        "restaurants": ["restaurant_004", "restaurant_005"]
+      },
+      "category_004": {
+        "name": "Casual Eats",
+        "caption": "A journey through flavors.",
+        "restaurants": ["restaurant_006"]
+      }
+    },
+    "restaurants": {
+      "restaurant_004": {
+        "category_code": "category_003",
+        "dishes": ["Roasted Beet Salad", "Filet Mignon", "Chocolate Cake"],
+        "location": "9 W 57th St, New York, NY 10019",
+        "name": "The Modern",
+        "notes": "The food was good, but the service was a bit slow.",
+        "photo": "https://www.themodern.com/images/the-modern-restaurant-exterior.jpg",
+        "rating_1": 9,
+        "rating_2": 8,
+        "rating_3": 7,
+        "visits": ["2023-05-15", "2023-07-22", "2023-09-03"]
+      },
+      "restaurant_005": {
+        "category_code": "category_003",
+        "dishes": ["Duck Confit", "Bouillabaisse", "Crème Brûlée"],
+        "location": "5th Avenue, New York, NY 10010",
+        "name": "La Cuisine",
+        "notes": "Exquisite dishes with top-notch service.",
+        "photo": "https://example.com/la-cuisine.jpg",
+        "rating_1": 10,
+        "rating_2": 10,
+        "rating_3": 9,
+        "visits": ["2023-06-10", "2023-08-20"]
+      },
+      "restaurant_006": {
+        "category_code": "category_004",
+        "dishes": ["BBQ Burger", "Loaded Nachos", "Milkshake"],
+        "location": "123 Main Street, Brooklyn, NY 11201",
+        "name": "Burger Barn",
+        "notes": "Affordable and tasty!",
+        "photo": "https://example.com/burger-barn.jpg",
+        "rating_1": 8,
+        "rating_2": 7,
+        "rating_3": 8,
+        "visits": ["2023-04-01", "2023-09-12"]
+      }
+    },
+    "users": {
+      "user_001": {
+        "boards": ["board_001"],
+        "name": "Geneva"
+      },
+      "user_002": {
+        "boards": ["board_001", "board_002"],
+        "name": "Alex"
+      },
+      "user_003": {
+        "boards": ["board_002"],
+        "name": "Chris"
+      }
+    }
+  }
+  
