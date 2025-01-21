@@ -1,0 +1,67 @@
+{
+  "boards": {
+    "board_001": {
+      "members": [
+        "user_001"
+      ],
+      "name": "Genny's Board",
+      "owner": "user_001"
+    }
+  },
+  "categories": {
+    "category_003": {
+      "caption": "Can't tell if we go to dine, or to dress up.",
+      "name": "Fine Dining"
+    }
+  },
+  "restaurants": {
+    "restaurant_004": {
+      "category_code": "category_003",
+      "dishes": [
+        "Roasted Beet Salad",
+        "Filet Mignon",
+        "Chocolate Cake"
+      ],
+      "location": "9 W 57th St, New York, NY 10019",
+      "name": "The Modern",
+      "notes": "The food was good, but the service was a bit slow.",
+      "photo": "https://www.themodern.com/images/the-modern-restaurant-exterior.jpg",
+      "rating_1": 9,
+      "rating_2": 8,
+      "rating_3": 7,
+      "visits": [
+        "2023-05-15",
+        "2023-07-22",
+        "2023-09-03"
+      ]
+    },
+    "restaurant_005": {
+      "category_code": "category_003",
+      "dishes": [
+        "Roasted Beet Salad",
+        "Filet Mignon",
+        "Chocolate Cake"
+      ],
+      "location": "9 W 57th St, New York, NY 10019",
+      "name": "The Modern",
+      "notes": "The food was good, but the service was a bit slow.",
+      "photo": "https://www.themodern.com/images/the-modern-restaurant-exterior.jpg",
+      "rating_1": 9,
+      "rating_2": 8,
+      "rating_3": 7,
+      "visits": [
+        "2023-05-15",
+        "2023-07-22",
+        "2023-09-03"
+      ]
+    }
+  },
+  "users": {
+    "user_001": {
+      "boards": [
+        "board_001"
+      ],
+      "name": "Geneva"
+    }
+  }
+}

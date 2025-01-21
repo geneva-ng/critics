@@ -1,3 +1,4 @@
-gcreds_test.json
+critics_key.json
 .env
 snapshots/
+node_modules
