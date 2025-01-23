@@ -9,15 +9,14 @@
 
 const {onRequest} = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
-
 const auth = require("./auth");
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
-
-exports.helloWorld = onRequest((request, response) => {
+// Example helloWorld function
+exports.helloWorld = onRequest((req, res) => {
   logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from Firebase!");
+  res.send("Hello from Firebase!");
 });
 
-exports.verifyToken = auth.verifyToken;
+// Export the verifyToken function
+exports.verifyToken = onRequest(auth.verifyToken);
+

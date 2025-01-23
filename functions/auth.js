@@ -1,31 +1,29 @@
-const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+// auth.js
+const admin = require("firebase-admin");
 
-// Ensure admin is initialized only once
+// Initialize Firebase Admin SDK if not already initialized
 if (!admin.apps.length) {
   admin.initializeApp();
 }
 
-// NOTE: This was a shit attempt at trying to do token authentication. 
-// You're going to need to study authentication flow before you can 
-// implement this correctly. 
-// Decide if you want to only do service account auth for now, or
-// handle the auth flow for all users. 
-
-
-// Example: Function to verify an ID token
-exports.verifyToken = functions.https.onRequest(async (req, res) => {
-  const idToken = req.headers.authorization?.split('Bearer ')[1];
+// Verify Token Function
+exports.verifyToken = async (req, res) => {
+  const idToken = req.body.idToken; // Expecting the ID token in the request body
 
   if (!idToken) {
-    return res.status(401).send({ error: 'Unauthorized' });
+    return res.status(400).send({error: "ID token is required"});
   }
 
   try {
+    // Verify the ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    res.status(200).send({ message: 'Token verified', uid: decodedToken.uid });
+    res.status(200).send({
+      message: "Token verified successfully",
+      uid: decodedToken.uid,
+      email: decodedToken.email,
+    });
   } catch (error) {
     console.error("Error verifying token:", error);
-    res.status(403).send({ error: 'Invalid token' });
+    res.status(401).send({error: "Invalid or expired token"});
   }
-});
+};
