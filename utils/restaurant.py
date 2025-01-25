@@ -1,6 +1,7 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
 from utils.category import add_restaurant_to_category, remove_restaurant_from_category
 
+# moved
 def create_restaurant(category_id, restaurant_id, data):
     """
     Add a restaurant and associate it with a category.
@@ -41,6 +42,7 @@ def create_restaurant(category_id, restaurant_id, data):
 
     return restaurant_data
 
+# moved
 def edit_rating(restaurant_id, rating_number, rating_value):
     """
     Edit a specific rating of a restaurant.
@@ -61,6 +63,7 @@ def edit_rating(restaurant_id, rating_number, rating_value):
     update_data(path, data)
     return data
 
+# moved
 def edit_notes(restaurant_id, notes):
     """
     Edit the notes for a restaurant.
@@ -75,6 +78,7 @@ def edit_notes(restaurant_id, notes):
     update_data(path, data)
     return data
 
+# moved
 def add_visit(restaurant_id, visit_date):
     """
     Add a visit date to a restaurant.
@@ -90,6 +94,7 @@ def add_visit(restaurant_id, visit_date):
     write_data(path, visits)
     return visits
 
+# moved
 def delete_visit(restaurant_id):
     """
     Delete the most recent visit date from a restaurant.
@@ -102,6 +107,7 @@ def delete_visit(restaurant_id):
         write_data(path, visits)
     return visits
 
+# moved
 def edit_dish_ranking(restaurant_id, dishes):
     """
     Edit the dishes for a restaurant.
@@ -115,6 +121,7 @@ def edit_dish_ranking(restaurant_id, dishes):
     write_data(path, dishes)
     return dishes
 
+# moved
 def add_dish(restaurant_id, dish):
     """
     Add a dish to a restaurant.
@@ -130,6 +137,7 @@ def add_dish(restaurant_id, dish):
     write_data(path, dishes)
     return dishes
 
+# moved
 def delete_dish(restaurant_id, dish):
     """
     Delete a dish from a restaurant.
@@ -159,6 +167,7 @@ def delete_restaurant(restaurant_id):
 
     delete_data(path)
 
+# moved
 def switch_restaurant_category(restaurant_id, new_category_id):
     """
     Change a restaurant's category.

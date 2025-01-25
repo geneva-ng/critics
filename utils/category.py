@@ -1,6 +1,7 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
 from utils.board import unlink_category_from_board, link_category_to_board
 
+# moved
 def create_category(category_id, name, caption, board_id):
     """
     Add a category to the specified board.
@@ -20,6 +21,7 @@ def create_category(category_id, name, caption, board_id):
     write_data(path, category_data)
     return category_data
 
+# moved
 def edit_category_name_caption(category_id, name=None, caption=None):
     """
     Edit an existing category's name or caption.
@@ -32,6 +34,7 @@ def edit_category_name_caption(category_id, name=None, caption=None):
         updates["caption"] = caption
     update_data(path, updates)
 
+# moved
 def delete_category(category_id, board_id):
     """
     Delete a category from the specified board and remove associated restaurants.
@@ -54,6 +57,7 @@ def delete_category(category_id, board_id):
 
     return None  # Explicitly return None for consistency
 
+# moved
 def add_restaurant_to_category(category_id, restaurant_id):
     """
     Add a restaurant ID to a category's restaurants array.
@@ -69,6 +73,7 @@ def add_restaurant_to_category(category_id, restaurant_id):
     write_data(path, restaurants)
     return restaurants
 
+# moved
 def remove_restaurant_from_category(category_id, restaurant_id):
     """
     Remove a restaurant ID from a category's restaurants array.

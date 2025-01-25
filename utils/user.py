@@ -2,6 +2,7 @@ from utils.board import delete_board
 from utils.firebase import write_data, read_data, update_data, delete_data
 from datetime import datetime
 
+# moved
 def remove_user_from_board(board_id, user_id):
     """
     Remove a user from the board's list of members.
@@ -12,6 +13,7 @@ def remove_user_from_board(board_id, user_id):
         members.remove(user_id)
         update_data(f"boards/{board_id}", {"members": members})
 
+# moved
 def create_user(name, user_id, boards=[]):
     path = f"users/{user_id}"
     user_data = {
@@ -22,6 +24,7 @@ def create_user(name, user_id, boards=[]):
     write_data(path, user_data)
     return user_data
 
+# moved 
 def get_user_boards(user_id):
     """
     Retrieve the list of boards a user is part of.
@@ -29,6 +32,7 @@ def get_user_boards(user_id):
     path = f"users/{user_id}/boards"
     return read_data(path) or []  # Ensure a list is always returned
 
+# moved
 def remove_board_from_user(user_id, board_code):
     """
     Remove a board from a user's list of boards.
@@ -39,6 +43,7 @@ def remove_board_from_user(user_id, board_code):
         update_data(f"users/{user_id}", {"boards": boards})
     return boards  # Return updated boards for confirmation
 
+# moved
 def delete_user(user_id):
     """
     Delete a user and all their data.

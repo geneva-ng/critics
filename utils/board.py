@@ -1,5 +1,6 @@
 from utils.firebase import write_data, read_data, update_data, delete_data
 
+# tested
 def add_board_to_user(user_id, board_code):
     """
     Adds a board to a user's list of boards.
@@ -11,6 +12,7 @@ def add_board_to_user(user_id, board_code):
         update_data(f"users/{user_id}", {"boards": boards})
     return boards
 
+# tested
 def create_board(board_id, name, owner):
     """
     Create a new board with a unique ID and a human-readable name.
@@ -29,6 +31,7 @@ def create_board(board_id, name, owner):
     write_data(path, board_data)  # Ensure 'categories' is written
     return board_data
 
+# tested
 def edit_board_name(board_id, name=None):
     """
     Edit an existing board's name.
@@ -39,6 +42,7 @@ def edit_board_name(board_id, name=None):
         updates["name"] = name
     update_data(path, updates)
 
+# tested
 def get_board_data(board_id):
     """
     Retrieve data for a specific board.
@@ -46,6 +50,7 @@ def get_board_data(board_id):
     path = f"boards/{board_id}"
     return read_data(path)  # Return None if no data is found, according to read_data in firebase.py
 
+# tested
 def add_user_to_board(board_id, user_id):
     """
     Add a user to the board's list of members.
@@ -63,6 +68,7 @@ def add_user_to_board(board_id, user_id):
     else:
         raise ValueError(f"User {user_id} is already a member of board {board_id}.")
     
+# tested
 def link_category_to_board(board_id, category_id):
     """
     Add a category to the specified board.
@@ -79,6 +85,7 @@ def link_category_to_board(board_id, category_id):
     else:
         raise ValueError(f"Category {category_id} is already in board {board_id}.")
     
+# tested
 def unlink_category_from_board(board_id, category_id):
     """
     Remove a category from the specified board.
@@ -89,6 +96,7 @@ def unlink_category_from_board(board_id, category_id):
         categories.remove(category_id)
         update_data(f"boards/{board_id}", {"categories": categories})
  
+# tested
 def delete_board(board_id, user_id):
     """
     Delete a board and all its associated data.
